@@ -22,7 +22,7 @@ jobs:
         with:
           java-version: 11
 
-      - name: Grant execute permission for gradlew
+      - name: Grant execute permission for mvnw
         run: chmod +x mvnw
         shell: bash
 
