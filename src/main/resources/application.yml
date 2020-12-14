@@ -59,32 +59,6 @@ server:
 spring:
   config:
     activate:
-      on-profile: prod-init
-  jpa:
-    generate-ddl: true
-    show-sql: false
-    database: mysql
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-  datasource:
-    initialization-mode: always
-    url: ${DATABASE_URL}
-    username: ${DATABASE_USERNAME}
-    password: ${DATABASE_PASSWORD}
-    driver-class-name: com.mysql.cj.jdbc.Driver
-
----
-server:
-  tomcat:
-    basedir: ${LOG_DIR}
-    accesslog:
-      enabled: true
-      file-date-format: .yyyy-MM-dd
-      pattern: "%{yyyy-MM-dd HH:mm:ss}t\trequest: %r\tstatus_code: %s\tremote_ip: %a\tlocal_ip: %A\t details: %{User-Agent}i"
-      suffix: .log
-
-spring:
-  config:
-    activate:
       on-profile: prod
   jpa:
     generate-ddl: true
