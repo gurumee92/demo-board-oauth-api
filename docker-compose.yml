@@ -1,0 +1,34 @@
+version: '3.1'
+
+services:
+  api:
+    container_name: api
+    build: ./
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    env_file:
+      - .env
+    volumes:
+      - ./logs:/logs
+    networks:
+      - demo_net
+  db:
+    container_name: db
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - "3306:3306"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+      MYSQL_DATABASE: test
+    networks:
+      - demo_net
+
+networks:
+  demo_net:
+    driver: bridge
