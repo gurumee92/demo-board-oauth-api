@@ -1,6 +1,8 @@
 package com.gurumee.demoboardauthapi.components.configs;
 
+import com.gurumee.demoboardauthapi.components.AppProperties;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -15,7 +17,9 @@ import java.util.*;
 
 @Configuration
 @EnableSwagger2
+@RequiredArgsConstructor
 public class SwaggerConfig {
+    private final AppProperties appProperties;
 
     @Bean
     public Docket api() {
@@ -74,7 +78,7 @@ public class SwaggerConfig {
         authorizationScopeList.add(new AuthorizationScope("write", "access all"));
 
         final List<GrantType> grantTypes = new ArrayList<>(1);
-        grantTypes.add(new ResourceOwnerPasswordCredentialsGrant("http://localhost:8080/oauth/token"));
+        grantTypes.add(new ResourceOwnerPasswordCredentialsGrant(appProperties.getGetTokenEndpointUrl()));
 
         return new OAuth("oauth2", authorizationScopeList, grantTypes);
     }
