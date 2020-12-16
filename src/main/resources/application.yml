@@ -1,6 +1,7 @@
 my-app:
   client-id: "client"
   client-secret: "password"
+  get-token-endpoint-url: "http://localhost:8080/oauth/token"
 
 server:
   tomcat:
@@ -50,6 +51,7 @@ spring:
 my-app:
   client-id: ${APP_CLIENT_ID}
   client-secret: ${APP_CLIENT_SECRET}
+  get-token-endpoint-url: ${GET_TOKEN_ENDPOINT_URL}
 
 server:
   tomcat:

@@ -23,7 +23,7 @@ if [ ! -z ${TARGET_PID} ]; then
   sudo kill ${TARGET_PID}
 fi
 
-nohup java -jar -Dserver.port=${TARGET_PORT} /home/ec2-user/app/target/*.jar --spring.profiles.active=prod --spring.datasource.url=${DATABASE_URL} --spring.datasource.username=${DATABASE_USERNAME} --spring.datasource.password=${DATABASE_PASSWORD} --server.tomcat.basedir=${LOG_DIR} --my-app.client-id=${APP_CLIENT_ID} --my-app.client-secret=${APP_CLIENT_SECRET} > /home/ec2-user/nohup.out 2>&1 &
+nohup java -jar -Dserver.port=${TARGET_PORT} /home/ec2-user/app/target/*.jar --spring.profiles.active=prod --spring.datasource.url=${DATABASE_URL} --spring.datasource.username=${DATABASE_USERNAME} --spring.datasource.password=${DATABASE_PASSWORD} --server.tomcat.basedir=${LOG_DIR} --my-app.client-id=${APP_CLIENT_ID} --my-app.client-secret=${APP_CLIENT_SECRET} --my-app.get-token-endpoint-url=${GET_TOKEN_ENDPOINT_URL} > /home/ec2-user/nohup.out 2>&1 &
 echo "> Now new WAS runs at ${TARGET_PORT}."
 exit 0
 

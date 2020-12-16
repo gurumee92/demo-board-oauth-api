@@ -14,4 +14,7 @@ public class AppProperties {
 
     @Value("${my-app.client-secret}")
     private String clientSecret;
+
+    @Value("${my-app.get-token-endpoint-url}")
+    private String getTokenEndpointUrl;
 }
