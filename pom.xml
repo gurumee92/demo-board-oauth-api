@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.gurumee</groupId>
-    <artifactId>demo-api</artifactId>
+    <artifactId>demo-oauth-api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>demo-api</name>
+    <name>demo-oauth-api</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
