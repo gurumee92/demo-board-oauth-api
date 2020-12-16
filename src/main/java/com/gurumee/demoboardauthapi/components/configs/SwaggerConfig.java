@@ -1,4 +1,4 @@
-package com.gurumee.demoboardauthapi.configs;
+package com.gurumee.demoboardauthapi.components.configs;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.context.annotation.Bean;

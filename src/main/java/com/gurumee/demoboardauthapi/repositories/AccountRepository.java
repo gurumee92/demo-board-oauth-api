@@ -1,5 +1,6 @@
-package com.gurumee.demoboardauthapi.accounts;
+package com.gurumee.demoboardauthapi.repositories;
 
+import com.gurumee.demoboardauthapi.models.entities.accounts.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

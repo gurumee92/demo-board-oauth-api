@@ -1,4 +1,4 @@
-package com.gurumee.demoboardauthapi.configs;
+package com.gurumee.demoboardauthapi.components.configs;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.client.RestTemplateBuilder;

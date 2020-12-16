@@ -1,4 +1,4 @@
-package com.gurumee.demoboardauthapi.configs;
+package com.gurumee.demoboardauthapi.components.configs;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

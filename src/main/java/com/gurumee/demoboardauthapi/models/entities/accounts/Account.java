@@ -1,6 +1,6 @@
-package com.gurumee.demoboardauthapi.accounts;
+package com.gurumee.demoboardauthapi.models.entities.accounts;
 
-import com.gurumee.demoboardauthapi.common.BaseTimeEntity;
+import com.gurumee.demoboardauthapi.models.entities.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;

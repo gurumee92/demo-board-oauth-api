@@ -1,5 +1,6 @@
-package com.gurumee.demoboardauthapi.accounts;
+package com.gurumee.demoboardauthapi.components.serializers;
 
+import com.gurumee.demoboardauthapi.models.entities.accounts.Account;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.JsonSerializer;

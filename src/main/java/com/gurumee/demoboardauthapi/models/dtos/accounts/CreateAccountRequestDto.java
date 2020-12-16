@@ -1,4 +1,4 @@
-package com.gurumee.demoboardauthapi.accounts;
+package com.gurumee.demoboardauthapi.models.dtos.accounts;
 
 import lombok.*;
 import org.codehaus.jackson.annotate.JsonProperty;

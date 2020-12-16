@@ -1,4 +1,4 @@
-package com.gurumee.demoboardauthapi.common;
+package com.gurumee.demoboardauthapi.components;
 
 import lombok.*;
 import org.springframework.beans.factory.annotation.Value;

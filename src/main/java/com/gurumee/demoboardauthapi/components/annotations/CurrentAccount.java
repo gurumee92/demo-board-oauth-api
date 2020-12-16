@@ -1,4 +1,4 @@
-package com.gurumee.demoboardauthapi.accounts;
+package com.gurumee.demoboardauthapi.components.annotations;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 

@@ -1,4 +1,4 @@
-package com.gurumee.demoboardauthapi.common;
+package com.gurumee.demoboardauthapi.models.entities;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

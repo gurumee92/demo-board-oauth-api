@@ -1,5 +1,7 @@
-package com.gurumee.demoboardauthapi.accounts;
+package com.gurumee.demoboardauthapi.components;
 
+import com.gurumee.demoboardauthapi.models.entities.accounts.Account;
+import com.gurumee.demoboardauthapi.models.entities.accounts.AccountRole;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

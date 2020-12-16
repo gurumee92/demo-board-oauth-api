@@ -1,4 +1,4 @@
-package com.gurumee.demoboardauthapi.common;
+package com.gurumee.demoboardauthapi.components;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

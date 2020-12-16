@@ -1,4 +1,4 @@
-package com.gurumee.demoboardauthapi.common;
+package com.gurumee.demoboardauthapi.components.serializers;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;

@@ -1,7 +1,7 @@
-package com.gurumee.demoboardauthapi.common;
+package com.gurumee.demoboardauthapi.components;
 
-import com.gurumee.demoboardauthapi.accounts.AccountService;
-import com.gurumee.demoboardauthapi.accounts.CreateAccountRequestDto;
+import com.gurumee.demoboardauthapi.services.AccountService;
+import com.gurumee.demoboardauthapi.models.dtos.accounts.CreateAccountRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

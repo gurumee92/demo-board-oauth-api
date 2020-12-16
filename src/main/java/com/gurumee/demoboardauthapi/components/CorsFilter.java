@@ -1,4 +1,4 @@
-package com.gurumee.demoboardauthapi.common;
+package com.gurumee.demoboardauthapi.components;
 
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;

@@ -1,5 +1,11 @@
-package com.gurumee.demoboardauthapi.accounts;
+package com.gurumee.demoboardauthapi.controllers;
 
+import com.gurumee.demoboardauthapi.components.AccountAdapter;
+import com.gurumee.demoboardauthapi.components.annotations.CurrentAccount;
+import com.gurumee.demoboardauthapi.models.entities.accounts.Account;
+import com.gurumee.demoboardauthapi.models.dtos.accounts.AccountResponseDto;
+import com.gurumee.demoboardauthapi.models.dtos.accounts.CreateAccountRequestDto;
+import com.gurumee.demoboardauthapi.services.AccountService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

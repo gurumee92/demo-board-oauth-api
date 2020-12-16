@@ -1,7 +1,7 @@
-package com.gurumee.demoboardauthapi.configs;
+package com.gurumee.demoboardauthapi.components.configs;
 
-import com.gurumee.demoboardauthapi.accounts.AccountService;
-import com.gurumee.demoboardauthapi.common.AppProperties;
+import com.gurumee.demoboardauthapi.services.AccountService;
+import com.gurumee.demoboardauthapi.components.AppProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

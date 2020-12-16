@@ -1,5 +1,10 @@
-package com.gurumee.demoboardauthapi.accounts;
+package com.gurumee.demoboardauthapi.services;
 
+import com.gurumee.demoboardauthapi.components.AccountAdapter;
+import com.gurumee.demoboardauthapi.models.entities.accounts.Account;
+import com.gurumee.demoboardauthapi.models.entities.accounts.AccountRole;
+import com.gurumee.demoboardauthapi.models.dtos.accounts.CreateAccountRequestDto;
+import com.gurumee.demoboardauthapi.repositories.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
