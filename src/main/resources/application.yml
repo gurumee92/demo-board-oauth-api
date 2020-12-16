@@ -47,6 +47,10 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 ---
+my-app:
+  client-id: ${APP_CLIENT_ID}
+  client-secret: ${APP_CLIENT_SECRET}
+
 server:
   tomcat:
     basedir: ${LOG_DIR}
