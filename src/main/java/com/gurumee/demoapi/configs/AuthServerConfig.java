@@ -28,12 +28,21 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-        security.passwordEncoder(passwordEncoder);
+        security.tokenKeyAccess("permitAll()")
+                .checkTokenAccess("isAuthenticated()")
+                .allowFormAuthenticationForClients();
     }
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.jdbc(dataSource);
+//        clients.jdbc(dataSource);
+        clients.inMemory()
+                .withClient("client")
+                .secret(passwordEncoder.encode("password"))
+                .authorizedGrantTypes("password")
+                .scopes("read", "write")
+                .accessTokenValiditySeconds(30000)
+        ;
     }
 
     @Override

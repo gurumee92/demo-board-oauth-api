@@ -49,9 +49,7 @@ public class AccountController {
 
     // 계정 조회 -> 토큰 필요, 같은 계정 아니면 403
     @ApiOperation(value = "GET /api/accounts/profile", notes = "get profile need account")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "Authorization", value = "authorization header", required = true, dataType = "string", paramType = "header")
-    })
+    @Authorization(value = "read")
     @GetMapping("/profile")
     public ResponseEntity getProfile(@ApiIgnore @CurrentAccount AccountAdapter currentAccount) {
         if (currentAccount == null) {

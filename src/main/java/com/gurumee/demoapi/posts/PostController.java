@@ -4,10 +4,7 @@ import com.gurumee.demoapi.accounts.Account;
 import com.gurumee.demoapi.accounts.AccountAdapter;
 import com.gurumee.demoapi.accounts.AccountResponseDto;
 import com.gurumee.demoapi.accounts.CurrentAccount;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -79,9 +76,7 @@ public class PostController {
     }
 
     @ApiOperation(value = "POST /api/posts/", notes = "create a post")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "Authorization", value = "authorization header", required = true, dataType = "string", paramType = "header")
-    })
+    @Authorization(value = "write")
     @PostMapping
     public ResponseEntity createPost(@RequestBody @Valid CreatePostRequestDto requestDto,
                                      @ApiIgnore Errors errors,
@@ -117,9 +112,7 @@ public class PostController {
     }
 
     @ApiOperation(value = "PUT /api/posts/id", notes = "update a post")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "Authorization", value = "authorization header", required = true, dataType = "string", paramType = "header")
-    })
+    @Authorization(value = "write")
     @PutMapping("/{id}")
     public ResponseEntity updatePost(@PathVariable("id") Long id,
                                      @RequestBody @Valid UpdatePostRequestDto requestDto,
@@ -149,9 +142,7 @@ public class PostController {
     }
 
     @ApiOperation(value = "DELETE /api/posts/id", notes = "delete a post")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "Authorization", value = "authorization header", required = true, dataType = "string", paramType = "header")
-    })
+    @Authorization(value = "write")
     @DeleteMapping("/{id}")
     public ResponseEntity deletePost(@PathVariable("id") Long id,
                                      @ApiIgnore @CurrentAccount AccountAdapter currentAccount) {

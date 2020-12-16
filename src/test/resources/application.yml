@@ -1,6 +1,6 @@
 my-app:
-  client-id: "test"
-  client-secret: "test"
+  client-id: "client"
+  client-secret: "password"
 
 spring:
   session:
