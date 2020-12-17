@@ -2,6 +2,7 @@ package com.gurumee.demoboardauthapi.controllers;
 
 import com.gurumee.demoboardauthapi.components.AccountAdapter;
 import com.gurumee.demoboardauthapi.components.annotations.CurrentAccount;
+import com.gurumee.demoboardauthapi.models.dtos.ErrorResponseDto;
 import com.gurumee.demoboardauthapi.models.dtos.accounts.AccountResponseDto;
 import com.gurumee.demoboardauthapi.models.dtos.accounts.CreateAccountRequestDto;
 import com.gurumee.demoboardauthapi.models.dtos.accounts.UpdateAccountRequestDto;
@@ -13,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +26,7 @@ import java.util.Optional;
 
 @Api(value = "Account API")
 @RestController
-@RequestMapping("/api/accounts")
+@RequestMapping(value = "/api/accounts")
 @RequiredArgsConstructor
 public class AccountController {
     private final AccountRepository accountRepository;
@@ -61,18 +63,20 @@ public class AccountController {
     @GetMapping("/profile")
     public ResponseEntity getAccount(@ApiIgnore @CurrentAccount AccountAdapter currentAccount) {
         if (currentAccount == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("you need access token");
+            ErrorResponseDto errResponseDto = ErrorResponseDto.builder()
+                    .message("You need to access token")
+                    .build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errResponseDto);
         }
         Account account = currentAccount.getAccount();
-        AccountResponseDto dto = AccountResponseDto.builder()
+        AccountResponseDto accountResponseDto = AccountResponseDto.builder()
                 .id(account.getId())
                 .username(account.getUsername())
                 .role(account.getRoles().toString())
                 .created_at(account.getCreatedAt())
                 .updated_at(account.getUpdatedAt())
                 .build();
-        System.out.println(dto);
-        return ResponseEntity.ok(dto);
+        return ResponseEntity.ok(accountResponseDto);
     }
 
     @ApiOperation(value = "PUT /api/accounts/profile", notes = "update profile(need access token)")

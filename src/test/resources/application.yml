@@ -12,8 +12,9 @@ spring:
     database: h2
     database-platform: org.hibernate.dialect.H2Dialect
   datasource:
-    initialization-mode: never
     url: jdbc:h2:mem:testdb
     username: sa
     password: password
     driver-class-name: org.h2.Driver
+    platform: h2
+    sql-script-encoding: UTF-8
