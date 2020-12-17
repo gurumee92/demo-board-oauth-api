@@ -44,7 +44,10 @@ public class AccountController {
         Optional<Account> saved = accountService.saveAccount(requestDto);
 
         if (saved.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+            ErrorResponseDto errResponseDto = ErrorResponseDto.builder()
+                    .message("Username is conflict.")
+                    .build();
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(errResponseDto);
         }
 
         Account account = saved.get();

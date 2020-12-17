@@ -55,6 +55,63 @@ class AccountControllerTest {
         objectMapper = new ObjectMapper();
     }
 
+    @Test
+    @DisplayName("create account 테스트 - 성공")
+    public void createAccountTest() throws Exception {
+        CreateAccountRequestDto dto = CreateAccountRequestDto.builder()
+                .username("test2")
+                .password("test")
+                .build();
+        mockMvc.perform(post("/api/accounts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto))
+        )
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*"))
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("id").exists())
+                .andExpect(jsonPath("created_at").exists())
+                .andExpect(jsonPath("updated_at").exists())
+                .andExpect(jsonPath("role").value("[USER]"))
+                .andExpect(jsonPath("username").value("test2"))
+        ;
+    }
+
+    @Test
+    @DisplayName("create account 테스트 - 실패 : 빈 입력 값")
+    public void createAccountTest_failed_empty_input() throws Exception {
+        CreateAccountRequestDto dto = CreateAccountRequestDto.builder().build();
+        mockMvc.perform(post("/api/accounts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto))
+        )
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*"))
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+        ;
+    }
+
+    @Test
+    @DisplayName("create account 테스트 - 실패 : 같은 username 비지니스 로직 에러")
+    public void createAccountTest_failed_collision_username() throws Exception {
+        CreateAccountRequestDto dto = CreateAccountRequestDto.builder()
+                .username("test")
+                .password("test")
+                .build();
+        mockMvc.perform(post("/api/accounts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto))
+        )
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*"))
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("message").value("Username is conflict."))
+        ;
+    }
+
     private String getBearerAccessToken() throws Exception {
         ResultActions perform = mockMvc.perform(post("/oauth/token")
                 .with(httpBasic(appProperties.getClientId(), appProperties.getClientSecret()))
