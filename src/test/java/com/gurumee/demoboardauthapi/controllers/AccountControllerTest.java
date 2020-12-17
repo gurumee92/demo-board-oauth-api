@@ -19,6 +19,7 @@ import org.springframework.security.oauth2.common.util.Jackson2JsonParser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -99,6 +100,24 @@ class AccountControllerTest {
                 ;
 
     }
+    @Test
+    @DisplayName("put account test - 실패 : invalid access token")
+    public void getAccountTest_failed_invalid_access_token() throws Exception {
+        String fakeAccessToken = "ksfnqllkd1r0ifafdl";
+        mockMvc.perform(get("/api/accounts/profile")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + fakeAccessToken)
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andDo(print())
+                .andExpect(status().isUnauthorized())
+                .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*"))
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*"))
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("error").value("invalid_token"))
+                .andExpect(jsonPath("error_description").value("Invalid access token: " + fakeAccessToken))
+                ;
+    }
 
     @Test
     @DisplayName("put account test - 성공")
@@ -148,11 +167,21 @@ class AccountControllerTest {
         )
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-// 무슨 문제인지 모르겠으나 BadRequest 상태 값은 받아오는데 헤더, 바디 설정이 망가짐.
-// 포스트맨에서는 정상 출력
+// 무슨 문제인지 모르겠으나 BadRequest 상태 값은 받아오는데 헤더, 바디 설정이 망가짐. (MockMvc/WebMvc 설정 때문이 아닐까 생각 중)
+// 포스트맨에서는 다음의 출력 형식을 가짐
+//        {
+//                "timestamp": "2020-12-17T04:22:21.269+00:00",
+//                "status": 400,
+//                "error": "Bad Request",
+//                "message": "",
+//                "path": "/api/accounts/profile"
+//        }
 //                .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*"))
 //                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
-//                .andExpect(jsonPath("message").value("Check Your Input, input is Invalidated."))
+//                .andExpect(jsonPath("timestamp").exists())
+//                .andExpect(jsonPath("error").value("Bad Request"))
+//                .andExpect(jsonPath("message").exists())
+//                .andExpect(jsonPath("path").value("/api/accounts/profile"))
         ;
 
     }
@@ -181,8 +210,8 @@ class AccountControllerTest {
     }
 
     @Test
-    @DisplayName("put account test - 실패 : no access token")
-    public void putAccountTest_failed_no_access_token() throws Exception {
+    @DisplayName("put account test - 실패 : not exist access token")
+    public void putAccountTest_failed_not_exist_access_token() throws Exception {
         UpdateAccountRequestDto dto = UpdateAccountRequestDto.builder()
                 .password("abc")
                 .password_check("abc")
@@ -218,6 +247,64 @@ class AccountControllerTest {
         )
                 .andDo(print())
                 .andExpect(status().isUnauthorized())
+                .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*"))
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("error").value("invalid_token"))
+                .andExpect(jsonPath("error_description").value("Invalid access token: " + fakeAccessToken))
+        ;
+    }
+
+    @Test
+    @DisplayName("delete account 테스트 - 성공")
+    public void deleteAccountTest() throws Exception {
+        long beforeDeletedCnt = accountRepository.count();
+
+        String bearerToken = getBearerAccessToken();
+        mockMvc.perform(delete("/api/accounts/profile")
+                .header(HttpHeaders.AUTHORIZATION, bearerToken)
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*"))
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("id").exists())
+                .andExpect(jsonPath("created_at").exists())
+                .andExpect(jsonPath("updated_at").exists())
+                .andExpect(jsonPath("role").value("[USER]"))
+                .andExpect(jsonPath("username").value("test"))
+        ;
+
+        long afterDeletedCnt = accountRepository.count();
+        assertEquals(beforeDeletedCnt-1, afterDeletedCnt);
+
+    }
+
+    @Test
+    @DisplayName("delete account 테스트 - 실패: accessToken 존재하지 않을 때")
+    public void deleteAccountTest_failed_not_exist_access_token() throws Exception {
+        mockMvc.perform(delete("/api/accounts/profile"))
+                .andDo(print())
+                .andExpect(status().isUnauthorized())
+                .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*"))
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("error").value("unauthorized"))
+                .andExpect(jsonPath("error_description").value("Full authentication is required to access this resource"))
+        ;
+
+    }
+    @Test
+    @DisplayName("delete account test - 실패 : invalid access token")
+    public void deleteAccountTest_failed_invalid_access_token() throws Exception {
+        String fakeAccessToken = "ksfnqllkd1r0ifafdl";
+        mockMvc.perform(delete("/api/accounts/profile")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + fakeAccessToken)
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andDo(print())
+                .andExpect(status().isUnauthorized())
+                .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*"))
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*"))
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("error").value("invalid_token"))

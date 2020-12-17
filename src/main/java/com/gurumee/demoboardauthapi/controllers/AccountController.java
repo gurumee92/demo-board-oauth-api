@@ -123,7 +123,11 @@ public class AccountController {
     @DeleteMapping("/profile")
     public ResponseEntity deleteAccount(@ApiIgnore @CurrentAccount AccountAdapter currentAccount) {
         if (currentAccount == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("you need access token");
+            // 이 에러는 발생하지 않음. 시큐리티 설정에 의해서 먼저 걸러짐.
+            ErrorResponseDto errResponseDto = ErrorResponseDto.builder()
+                    .message("You need to access token")
+                    .build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errResponseDto);
         }
 
         Account account = currentAccount.getAccount();
