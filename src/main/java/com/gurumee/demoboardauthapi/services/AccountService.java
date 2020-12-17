@@ -1,6 +1,7 @@
 package com.gurumee.demoboardauthapi.services;
 
 import com.gurumee.demoboardauthapi.components.AccountAdapter;
+import com.gurumee.demoboardauthapi.models.dtos.accounts.UpdateAccountRequestDto;
 import com.gurumee.demoboardauthapi.models.entities.accounts.Account;
 import com.gurumee.demoboardauthapi.models.entities.accounts.AccountRole;
 import com.gurumee.demoboardauthapi.models.dtos.accounts.CreateAccountRequestDto;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.Set;
@@ -21,6 +23,7 @@ public class AccountService implements UserDetailsService {
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional
     public Optional<Account> saveAccount(CreateAccountRequestDto requestDto) {
         Optional<Account> account = accountRepository.findByUsername(requestDto.getUsername());
 
@@ -42,5 +45,19 @@ public class AccountService implements UserDetailsService {
         Account account = accountRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
         return new AccountAdapter(account);
+    }
+
+    @Transactional
+    public Optional<Account> update(Account account, UpdateAccountRequestDto requestDto) {
+        String password = requestDto.getPassword();
+        String passwordCheck = requestDto.getPassword_check();
+
+        if (!password.equals(passwordCheck)) {
+            return Optional.empty();
+        }
+
+        account.setPassword(passwordEncoder.encode(password));
+        Account updated = accountRepository.save(account);
+        return Optional.of(updated);
     }
 }
