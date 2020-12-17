@@ -142,6 +142,7 @@ public class AccountController {
                 .build();
 
         accountRepository.delete(account);
+
         return ResponseEntity.ok(dto);
     }
 }

@@ -56,7 +56,7 @@ class AccountControllerTest {
     }
 
     @Test
-    @DisplayName("create account 테스트 - 성공")
+    @DisplayName("POST /api/accounts 테스트 - 성공")
     public void createAccountTest() throws Exception {
         CreateAccountRequestDto dto = CreateAccountRequestDto.builder()
                 .username("test2")
@@ -79,7 +79,7 @@ class AccountControllerTest {
     }
 
     @Test
-    @DisplayName("create account 테스트 - 실패 : 빈 입력 값")
+    @DisplayName("POST /api/accounts 테스트 - 실패 : 빈 입력 값")
     public void createAccountTest_failed_empty_input() throws Exception {
         CreateAccountRequestDto dto = CreateAccountRequestDto.builder().build();
         mockMvc.perform(post("/api/accounts")
@@ -94,7 +94,7 @@ class AccountControllerTest {
     }
 
     @Test
-    @DisplayName("create account 테스트 - 실패 : 같은 username 비지니스 로직 에러")
+    @DisplayName("POST /api/accounts 테스트 - 실패 : 같은 username 비지니스 로직 에러")
     public void createAccountTest_failed_collision_username() throws Exception {
         CreateAccountRequestDto dto = CreateAccountRequestDto.builder()
                 .username("test")
@@ -126,7 +126,7 @@ class AccountControllerTest {
     }
 
     @Test
-    @DisplayName("get account 테스트 - 성공")
+    @DisplayName("GET /api/accounts/profile 테스트 - 성공")
     public void getAccountTest() throws Exception {
         String bearerToken = getBearerAccessToken();
         mockMvc.perform(get("/api/accounts/profile")
@@ -146,7 +146,7 @@ class AccountControllerTest {
     }
 
     @Test
-    @DisplayName("get account 테스트 - 실패: accessToken 존재하지 않을 때")
+    @DisplayName("GET /api/accounts/profile 테스트 - 실패: accessToken 존재하지 않을 때")
     public void getAccountTest_failed_not_exist_access_token() throws Exception {
         mockMvc.perform(get("/api/accounts/profile"))
                 .andDo(print())
@@ -158,7 +158,7 @@ class AccountControllerTest {
 
     }
     @Test
-    @DisplayName("put account test - 실패 : invalid access token")
+    @DisplayName("GET /api/accounts/profile 테스트 - 실패 : invalid access token")
     public void getAccountTest_failed_invalid_access_token() throws Exception {
         String fakeAccessToken = "ksfnqllkd1r0ifafdl";
         mockMvc.perform(get("/api/accounts/profile")
@@ -177,7 +177,7 @@ class AccountControllerTest {
     }
 
     @Test
-    @DisplayName("put account test - 성공")
+    @DisplayName("PUT /api/accounts/profile 테스트 - 성공")
     public void putAccountTest() throws Exception {
         Account account = accountRepository.findByUsername("test").get();
         final String beforeUpdatedPassword = account.getPassword();
@@ -212,7 +212,7 @@ class AccountControllerTest {
     }
 
     @Test
-    @DisplayName("put account test - 실패 : 빈 입력값")
+    @DisplayName("PUT /api/accounts/profile 테스트 - 실패 : 빈 입력값")
     public void putAccountTest_failed_empty_input() throws Exception {
         String bearerToken = getBearerAccessToken();
         UpdateAccountRequestDto dto = UpdateAccountRequestDto.builder().build();
@@ -244,7 +244,7 @@ class AccountControllerTest {
     }
 
     @Test
-    @DisplayName("put account test - 실패 : 잘못된 입력값 - 비지니스 로직 에러")
+    @DisplayName("PUT /api/accounts/profile 테스트 - 실패 : 잘못된 입력값 - 비지니스 로직 에러")
     public void putAccountTest_failed_wrong_input() throws Exception {
         String bearerToken = getBearerAccessToken();
         UpdateAccountRequestDto dto = UpdateAccountRequestDto.builder()
@@ -267,7 +267,7 @@ class AccountControllerTest {
     }
 
     @Test
-    @DisplayName("put account test - 실패 : not exist access token")
+    @DisplayName("PUT /api/accounts/profile 테스트 - 실패 : not exist access token")
     public void putAccountTest_failed_not_exist_access_token() throws Exception {
         UpdateAccountRequestDto dto = UpdateAccountRequestDto.builder()
                 .password("abc")
@@ -289,7 +289,7 @@ class AccountControllerTest {
     }
 
     @Test
-    @DisplayName("put account test - 실패 : invalid access token")
+    @DisplayName("PUT /api/accounts/profile 테스트 - 실패 : invalid access token")
     public void putAccountTest_failed_invalid_access_token() throws Exception {
         UpdateAccountRequestDto dto = UpdateAccountRequestDto.builder()
                 .password("abc")
@@ -312,7 +312,7 @@ class AccountControllerTest {
     }
 
     @Test
-    @DisplayName("delete account 테스트 - 성공")
+    @DisplayName("DELETE /api/accounts/profile 테스트 - 성공")
     public void deleteAccountTest() throws Exception {
         long beforeDeletedCnt = accountRepository.count();
 
@@ -338,7 +338,7 @@ class AccountControllerTest {
     }
 
     @Test
-    @DisplayName("delete account 테스트 - 실패: accessToken 존재하지 않을 때")
+    @DisplayName("DELETE /api/accounts/profile 테스트 - 실패: accessToken 존재하지 않을 때")
     public void deleteAccountTest_failed_not_exist_access_token() throws Exception {
         mockMvc.perform(delete("/api/accounts/profile"))
                 .andDo(print())
@@ -351,7 +351,7 @@ class AccountControllerTest {
 
     }
     @Test
-    @DisplayName("delete account test - 실패 : invalid access token")
+    @DisplayName("DELETE /api/accounts/profile 테스트 - 실패 : invalid access token")
     public void deleteAccountTest_failed_invalid_access_token() throws Exception {
         String fakeAccessToken = "ksfnqllkd1r0ifafdl";
         mockMvc.perform(delete("/api/accounts/profile")

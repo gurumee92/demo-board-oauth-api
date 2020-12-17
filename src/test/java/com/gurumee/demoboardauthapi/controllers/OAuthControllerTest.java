@@ -54,7 +54,7 @@ public class OAuthControllerTest {
 
 
     @Test
-    @DisplayName("/oauth/token 테스트 - 성공")
+    @DisplayName("POST /oauth/token 테스트 - 성공")
     public void oauthTokenTest() throws Exception {
         mockMvc.perform(post("/oauth/token")
                     .with(httpBasic(appProperties.getClientId(), appProperties.getClientSecret()))
@@ -74,7 +74,7 @@ public class OAuthControllerTest {
     }
 
     @Test
-    @DisplayName("/oauth/token 테스트 - 잘못된 헤더")
+    @DisplayName("POST /oauth/token 테스트 - 잘못된 헤더")
     public void oauthTokenTestFailed_wrong_authorization_header() throws Exception {
         String fakeHeaderValue = "fake";
         mockMvc.perform(post("/oauth/token")
@@ -89,7 +89,7 @@ public class OAuthControllerTest {
     }
 
     @Test
-    @DisplayName("/oauth/token 테스트 - 잘못된 파라미터, grant_tpe")
+    @DisplayName("POST /oauth/token 테스트 - 잘못된 파라미터, grant_tpe")
     public void oauthTokenTestFailed_wrong_params_grant_type() throws Exception {
         mockMvc.perform(post("/oauth/token")
                 .with(httpBasic(appProperties.getClientId(), appProperties.getClientSecret()))
@@ -105,7 +105,7 @@ public class OAuthControllerTest {
     }
 
     @Test
-    @DisplayName("/oauth/token 테스트 - 잘못된 파라미터, 유저 정보")
+    @DisplayName("POST /oauth/token 테스트 - 잘못된 파라미터, 유저 정보")
     public void oauthTokenTestFailed_wrong_params_user_info() throws Exception {
         String fakeHeaderValue = "fake";
         mockMvc.perform(post("/oauth/token")
@@ -135,7 +135,7 @@ public class OAuthControllerTest {
 
 
     @Test
-    @DisplayName("/oauth/check_token 테스트 - 성공")
+    @DisplayName("GET /oauth/check_token 테스트 - 성공")
     public void checkTokenTest() throws Exception {
         String token = getAccessToken();
         mockMvc.perform(get("/oauth/check_token").param("token", token)
@@ -157,7 +157,7 @@ public class OAuthControllerTest {
 
 
     @Test
-    @DisplayName("/oauth/check_token 테스트 - 실패: 잘못된 헤더")
+    @DisplayName("GET /oauth/check_token 테스트 - 실패: 잘못된 헤더")
     public void checkTokenTestFailed_invalid_header() throws Exception {
         String token = getAccessToken();
         String fakeValue = "fake";
@@ -170,7 +170,7 @@ public class OAuthControllerTest {
     }
 
     @Test
-    @DisplayName("/oauth/check_token 테스트 - 실패: 빈 토큰 전달")
+    @DisplayName("GET /oauth/check_token 테스트 - 실패: 빈 토큰 전달")
     public void checkTokenTestFailed_empty_token() throws Exception {
         mockMvc.perform(get("/oauth/check_token")
                 .with(httpBasic(appProperties.getClientId(), appProperties.getClientSecret()))
@@ -181,7 +181,7 @@ public class OAuthControllerTest {
     }
 
     @Test
-    @DisplayName("/oauth/check_token 테스트 - 실패: 잘못된 토큰 전달")
+    @DisplayName("GET /oauth/check_token 테스트 - 실패: 잘못된 토큰 전달")
     public void checkTokenTestFailed_invalid_token() throws Exception {
         mockMvc.perform(get("/oauth/check_token").param("token", "fake-token")
                 .with(httpBasic(appProperties.getClientId(), appProperties.getClientSecret()))
