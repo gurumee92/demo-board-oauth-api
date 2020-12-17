@@ -56,7 +56,7 @@ public class AccountService implements UserDetailsService {
             return Optional.empty();
         }
 
-        account.setPassword(password);
+        account.setPassword(passwordEncoder.encode(password));
         Account updated = accountRepository.save(account);
         return Optional.of(updated);
     }

@@ -90,14 +90,21 @@ public class AccountController {
         }
 
         if (currentAccount == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("you need access token");
+            // 이 에러는 발생하지 않음. 시큐리티 설정에 의해서 먼저 걸러짐.
+            ErrorResponseDto errResponseDto = ErrorResponseDto.builder()
+                    .message("You need to access token")
+                    .build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errResponseDto);
         }
 
         Account account = currentAccount.getAccount();
         Optional<Account> updateOrNull = accountService.update(account, requestDto);
 
         if (updateOrNull.isEmpty()) {
-            return ResponseEntity.badRequest().body("check your input");
+            ErrorResponseDto errResponseDto = ErrorResponseDto.builder()
+                    .message("Check Your Input, password and check different.")
+                    .build();
+            return ResponseEntity.badRequest().body(errResponseDto);
         }
 
         Account updated = updateOrNull.get();
