@@ -120,7 +120,7 @@ public class AccountController {
         return ResponseEntity.ok(dto);
     }
 
-    @ApiOperation(value = "PUT /api/accounts/profile", notes = "update profile(need access token)")
+    @ApiOperation(value = "DELETE /api/accounts/profile", notes = "delete profile(need access token)")
     @Authorization(value = "write")
     @DeleteMapping("/profile")
     public ResponseEntity deleteAccount(@ApiIgnore @CurrentAccount AccountAdapter currentAccount) {
