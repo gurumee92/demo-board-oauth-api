@@ -17,4 +17,7 @@ public class AppProperties {
 
     @Value("${my-app.get-token-endpoint-url}")
     private String getTokenEndpointUrl;
+
+    @Value("${my-app.resource-post-endpoint-url}")
+    private String resourcePostEndpointUrl;
 }

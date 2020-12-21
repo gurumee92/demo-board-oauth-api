@@ -2,6 +2,7 @@ my-app:
   client-id: "client"
   client-secret: "password"
   get-token-endpoint-url: "http://localhost:8080/oauth/token"
+  resource-post-endpoint-url: "http://localhost:8081"
 
 server:
   tomcat:
@@ -53,7 +54,7 @@ my-app:
   client-id: ${APP_CLIENT_ID}
   client-secret: ${APP_CLIENT_SECRET}
   get-token-endpoint-url: ${GET_TOKEN_ENDPOINT_URL}
-
+  resource-post-endpoint-url: ${RESOURCE_POST_ENDPOINT_URL}
 server:
   tomcat:
     basedir: ${LOG_DIR}
