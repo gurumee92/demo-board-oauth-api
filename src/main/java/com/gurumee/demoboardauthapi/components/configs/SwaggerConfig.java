@@ -51,7 +51,7 @@ public class SwaggerConfig {
 
     private ApiInfo getApiInfo() {
         return new ApiInfoBuilder()
-                .title("API")
+                .title("Demo Board OAuth API")
                 .build();
     }
 
