@@ -1,5 +1,10 @@
 package com.gurumee.demoboardauthapi.components.configs;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +18,8 @@ import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.web.client.RestTemplate;
 
 import javax.sql.DataSource;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Configuration
 @RequiredArgsConstructor

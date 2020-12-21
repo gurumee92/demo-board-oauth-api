@@ -1,13 +1,16 @@
 package com.gurumee.demoboardauthapi.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.gurumee.demoboardauthapi.components.AccountAdapter;
 import com.gurumee.demoboardauthapi.components.annotations.CurrentAccount;
 import com.gurumee.demoboardauthapi.models.dtos.ErrorResponseDto;
 import com.gurumee.demoboardauthapi.models.dtos.accounts.AccountResponseDto;
 import com.gurumee.demoboardauthapi.models.dtos.accounts.CreateAccountRequestDto;
 import com.gurumee.demoboardauthapi.models.dtos.accounts.UpdateAccountRequestDto;
+import com.gurumee.demoboardauthapi.models.dtos.posts.PostResponseDto;
 import com.gurumee.demoboardauthapi.models.entities.accounts.Account;
 import com.gurumee.demoboardauthapi.repositories.AccountRepository;
+import com.gurumee.demoboardauthapi.repositories.PostRepository;
 import com.gurumee.demoboardauthapi.services.AccountService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -20,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -30,8 +35,8 @@ import java.util.Optional;
 public class AccountController {
     private final AccountRepository accountRepository;
     private final AccountService accountService;
+    private final PostRepository postRepository;
 
-    // 계정 생성 -> 토큰 필요 x
     @ApiOperation(value = "POST /api/accounts", notes = "create a account")
     @PostMapping
     public ResponseEntity createAccount(@RequestBody @Valid CreateAccountRequestDto requestDto,
@@ -92,7 +97,6 @@ public class AccountController {
         }
 
         if (currentAccount == null) {
-            // 이 에러는 발생하지 않음. 시큐리티 설정에 의해서 먼저 걸러짐.
             ErrorResponseDto errResponseDto = ErrorResponseDto.builder()
                     .message("You need to access token")
                     .build();
@@ -120,12 +124,12 @@ public class AccountController {
         return ResponseEntity.ok(dto);
     }
 
-    @ApiOperation(value = "PUT /api/accounts/profile", notes = "update profile(need access token)")
+    @ApiOperation(value = "DELETE /api/accounts/profile", notes = "delete profile(need access token)")
     @Authorization(value = "write")
     @DeleteMapping("/profile")
-    public ResponseEntity deleteAccount(@ApiIgnore @CurrentAccount AccountAdapter currentAccount) {
+    public ResponseEntity deleteAccount(@ApiIgnore @CurrentAccount AccountAdapter currentAccount,
+                                        @ApiIgnore @RequestHeader Map<String, String> headers) throws JsonProcessingException {
         if (currentAccount == null) {
-            // 이 에러는 발생하지 않음. 시큐리티 설정에 의해서 먼저 걸러짐.
             ErrorResponseDto errResponseDto = ErrorResponseDto.builder()
                     .message("You need to access token")
                     .build();
@@ -133,6 +137,19 @@ public class AccountController {
         }
 
         Account account = currentAccount.getAccount();
+        List<PostResponseDto> postList = postRepository.getPostListByUsername(account.getUsername());
+
+        for (PostResponseDto post : postList) {
+            PostResponseDto response = postRepository.deletePost(headers.get("authorization"), post.getId());
+
+            if (response == null) {
+                ErrorResponseDto errResponseDto = ErrorResponseDto.builder()
+                        .message("POST API와의 통신이 불안정합니다.")
+                        .build();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errResponseDto);
+            }
+        }
+
         AccountResponseDto dto = AccountResponseDto.builder()
                 .id(account.getId())
                 .username(account.getUsername())
@@ -140,9 +157,7 @@ public class AccountController {
                 .created_at(account.getCreatedAt())
                 .updated_at(account.getUpdatedAt())
                 .build();
-
         accountRepository.delete(account);
-
         return ResponseEntity.ok(dto);
     }
 }
