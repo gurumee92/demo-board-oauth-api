@@ -1,9 +1,7 @@
 package com.gurumee.demoboardauthapi.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gurumee.demoboardauthapi.components.AccountAdapter;
-import com.gurumee.demoboardauthapi.components.AppProperties;
 import com.gurumee.demoboardauthapi.components.annotations.CurrentAccount;
 import com.gurumee.demoboardauthapi.models.dtos.ErrorResponseDto;
 import com.gurumee.demoboardauthapi.models.dtos.accounts.AccountResponseDto;
@@ -12,15 +10,16 @@ import com.gurumee.demoboardauthapi.models.dtos.accounts.UpdateAccountRequestDto
 import com.gurumee.demoboardauthapi.models.dtos.posts.PostResponseDto;
 import com.gurumee.demoboardauthapi.models.entities.accounts.Account;
 import com.gurumee.demoboardauthapi.repositories.AccountRepository;
+import com.gurumee.demoboardauthapi.repositories.PostRepository;
 import com.gurumee.demoboardauthapi.services.AccountService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
@@ -36,10 +35,7 @@ import java.util.Optional;
 public class AccountController {
     private final AccountRepository accountRepository;
     private final AccountService accountService;
-
-    private final AppProperties appProperties;
-    private final RestTemplate restTemplate;
-    private final ObjectMapper objectMapper;
+    private final PostRepository postRepository;
 
     @ApiOperation(value = "POST /api/accounts", notes = "create a account")
     @PostMapping
@@ -141,20 +137,16 @@ public class AccountController {
         }
 
         Account account = currentAccount.getAccount();
+        List<PostResponseDto> postList = postRepository.getPostListByUsername(account.getUsername());
 
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity(appProperties.getResourcePostEndpointUrl() + "/api/posts?username=" + account.getUsername(), String.class);
-        List<PostResponseDto> dtoList = objectMapper.readValue(responseEntity.getBody(), objectMapper.getTypeFactory().constructCollectionType(List.class, PostResponseDto.class));
-        HttpHeaders reqHeader = new HttpHeaders();
-        reqHeader.add("Authorization", headers.get("authorization"));
-        HttpEntity<String> request = new HttpEntity<>(reqHeader);
+        for (PostResponseDto post : postList) {
+            PostResponseDto response = postRepository.deletePost(headers.get("authorization"), post.getId());
 
-        for (PostResponseDto dto : dtoList) {
-            ResponseEntity<PostResponseDto> response = restTemplate.exchange(appProperties.getResourcePostEndpointUrl() + "/api/posts/" + dto.getId(), HttpMethod.DELETE, request, PostResponseDto.class);
-            if (!response.getStatusCode().equals(HttpStatus.OK)) {
-                ErrorResponseDto errorResponseDto = ErrorResponseDto.builder()
-                        .message("post api 통신 오류, account의 post를 삭제할 수 없습니다.")
+            if (response == null) {
+                ErrorResponseDto errResponseDto = ErrorResponseDto.builder()
+                        .message("POST API와의 통신이 불안정합니다.")
                         .build();
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponseDto);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errResponseDto);
             }
         }
 
