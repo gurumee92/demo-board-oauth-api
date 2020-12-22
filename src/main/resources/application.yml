@@ -13,6 +13,16 @@ server:
       pattern: "%{yyyy-MM-dd HH:mm:ss}t\trequest: %r\tstatus_code: %s\tremote_ip: %a\tlocal_ip: %A\t details: %{User-Agent}i"
       suffix: .log
 
+logging:
+  file:
+    name: ./logs/application-error.log
+  level:
+    root: info
+
+  logback:
+    rollingpolicy:
+      file-name-pattern: ./logs/application-error-%d{yyyy-MM-dd}.%i.log
+      max-file-size: 30MB
 ---
 spring:
   config:
@@ -63,6 +73,17 @@ server:
       file-date-format: .yyyy-MM-dd
       pattern: "%{yyyy-MM-dd HH:mm:ss}t\trequest: %r\tstatus_code: %s\tremote_ip: %a\tlocal_ip: %A\t details: %{User-Agent}i"
       suffix: .log
+
+logging:
+  file:
+    name: ${LOG_DIR}/logs/application-error.log
+  level:
+    root: error
+
+  logback:
+    rollingpolicy:
+      file-name-pattern: ${LOG_DIR}/logs/application-error-%d{yyyy-MM-dd}.%i.log
+      max-file-size: 30MB
 
 spring:
   config:

@@ -1,6 +1,5 @@
 package com.gurumee.demoboardauthapi.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.gurumee.demoboardauthapi.components.AccountAdapter;
 import com.gurumee.demoboardauthapi.components.annotations.CurrentAccount;
 import com.gurumee.demoboardauthapi.models.dtos.ErrorResponseDto;
@@ -128,7 +127,7 @@ public class AccountController {
     @Authorization(value = "write")
     @DeleteMapping("/profile")
     public ResponseEntity deleteAccount(@ApiIgnore @CurrentAccount AccountAdapter currentAccount,
-                                        @ApiIgnore @RequestHeader Map<String, String> headers) throws JsonProcessingException {
+                                        @ApiIgnore @RequestHeader Map<String, String> headers) {
         if (currentAccount == null) {
             ErrorResponseDto errResponseDto = ErrorResponseDto.builder()
                     .message("You need to access token")
