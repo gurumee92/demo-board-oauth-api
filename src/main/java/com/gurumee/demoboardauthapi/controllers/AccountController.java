@@ -1,6 +1,5 @@
 package com.gurumee.demoboardauthapi.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.gurumee.demoboardauthapi.components.AccountAdapter;
 import com.gurumee.demoboardauthapi.components.annotations.CurrentAccount;
 import com.gurumee.demoboardauthapi.models.dtos.ErrorResponseDto;

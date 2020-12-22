@@ -9,6 +9,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.gurumee.demoboardauthapi.components.AppProperties;
 import com.gurumee.demoboardauthapi.models.dtos.posts.PostResponseDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.*;
 import org.springframework.stereotype.Repository;
@@ -21,6 +22,7 @@ import java.util.List;
 @Repository
 @RequiredArgsConstructor
 @Profile("!test")
+@Slf4j
 public class PostRepositoryImpl implements PostRepository{
     private final AppProperties appProperties;
     private final RestTemplate restTemplate;
@@ -39,6 +41,7 @@ public class PostRepositoryImpl implements PostRepository{
             List<PostResponseDto> dtoList = objectMapper.readValue(responseEntity.getBody(), objectMapper.getTypeFactory().constructCollectionType(List.class, PostResponseDto.class));
             return dtoList;
         } catch (JsonProcessingException e) {
+            log.error(e.getMessage());
             throw new RuntimeException("Json Parsing Error - post list");
         }
     }
