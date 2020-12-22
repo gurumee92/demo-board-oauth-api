@@ -67,7 +67,7 @@ my-app:
   resource-post-endpoint-url: ${RESOURCE_POST_ENDPOINT_URL}
 server:
   tomcat:
-    basedir: ${LOG_DIR}
+    basedir: ~/logs
     accesslog:
       enabled: true
       file-date-format: .yyyy-MM-dd
@@ -76,13 +76,13 @@ server:
 
 logging:
   file:
-    name: ${LOG_DIR}/logs/application-error.log
+    name: ~/logs/application-error.log
   level:
     root: error
 
   logback:
     rollingpolicy:
-      file-name-pattern: ${LOG_DIR}/logs/application-error-%d{yyyy-MM-dd}.%i.log
+      file-name-pattern: ~/logs/application-error-%d{yyyy-MM-dd}.%i.log
       max-file-size: 30MB
 
 spring:
