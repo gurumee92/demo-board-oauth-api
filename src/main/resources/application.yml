@@ -23,8 +23,6 @@ logging:
     rollingpolicy:
       file-name-pattern: ./logs/application-error-%d{yyyy-MM-dd}.%i.log
       max-file-size: 30MB
-
-
 ---
 spring:
   config:
